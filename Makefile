@@ -9,3 +9,6 @@ config.o: ./src/config.c
 
 main.o: ./src/main.c
 	gcc -o ./build/main.o ./src/main.c -c
+
+clean:
+	rm ./build/*.o
