@@ -57,7 +57,7 @@ int get_bool_from_option(char *option) {
 
 void change_config(Config *config, char *keyword, int opt) {
   if (!strcmp(keyword, "print_logo")) {
-    *config = opt;
+    (*config).print_logo = opt;
   }
 }
 
