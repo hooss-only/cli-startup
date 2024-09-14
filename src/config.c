@@ -7,12 +7,13 @@
 #define KEYWORDS_TOGGLE_LENGTH 1
 
 const char *KEYWORDS[KEYWORDS_LENGTH] = {
-  "print_logo"
+  "print_logo",
+  "logo_color",
 };
 
 const char *KEYWORDS_TOGGLE[KEYWORDS_TOGGLE_LENGTH] = {
   "print_logo"
-}
+};
 
 char* get_config_path(char* file) {
   strcpy(file, getenv("HOME"));
@@ -23,6 +24,7 @@ char* get_config_path(char* file) {
 
 typedef struct {
   int print_logo;
+  char *logo_color;
 } Config;
 
 void create_config() {
@@ -33,8 +35,8 @@ void create_config() {
   FILE *config_file;
   config_file = fopen(path, "a");
 
-  for (int i = 0, l = KEYWORDS_LENGTH; i < l; i++) {
-    fprintf(config_file, "%s=true\n", KEYWORDS[i]);
+  for (int i = 0, l = KEYWORDS_TOGGLE_LENGTH; i < l; i++) {
+    fprintf(config_file, "%s=true\n", KEYWORDS_TOGGLE[i]);
   }
 
   fclose(config_file);
@@ -60,12 +62,12 @@ int get_bool_from_option(char *option) {
   return opt;
 }
 
-void change_config(Config *config, char *keyword, char *option) {
+void change_config(Config *config, char *keyword, char *option, int line_number) {
   int opt;
   
   int is_toggle = 0;
   for (int i = 0; i < KEYWORDS_TOGGLE_LENGTH; i++) {
-    if (!strcmp(keyword, KEYWORDS_TOGGLE[i]) {
+    if (!strcmp(keyword, KEYWORDS_TOGGLE[i])) {
       is_toggle = 1;
       break;
     }
@@ -75,13 +77,33 @@ void change_config(Config *config, char *keyword, char *option) {
     opt = get_bool_from_option(option);
 
     if (opt == -1) {
-      fprintf(stderr, "line %d, %s is not a type of option.\n", line_number, option);
+      fprintf(stderr, "line %d of config, %s is not a type of option.\n", line_number, option);
       exit(1);
     }
   }
 
   if (!strcmp(keyword, "print_logo")) {
     (*config).print_logo = opt;
+    return;
+  }
+
+if (!strcmp(keyword, "logo_color")) {
+    char *color_code = NULL;
+    
+    char *colors[] = { "black", "red", "green", "yellow", "blue", "purple", "cyan", "white" };
+    char *color_codes[] = { "\033[0;30m", "\033[0;31m", "\033[0;32m", "\033[0;33m", "\033[0;34m", "\033[0;35m", "\033[0;36m", "\033[0;37m" };
+
+    for (int i = 0; i < 8; i++)
+      if (!strcmp(option, colors[i]))
+        color_code = color_codes[i];
+
+    if (color_code == NULL) {
+      fprintf(stderr, "%s is not an available color.", option);
+      exit(1);
+    }
+
+    (*config).logo_color = color_code;
+    return;
   }
 }
 
@@ -125,7 +147,7 @@ void read_config(Config *config) {
       }
     }
     
-    change_config(config, keyword, option);
+    change_config(config, keyword, option, line_number);
     line_number++;
   }
   

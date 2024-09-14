@@ -11,13 +11,13 @@ int main() {
   read_config(&config);
   
   if (config.print_logo) {
-    print_logo();
+    print_logo(config.logo_color);
   }
   
   return 0;
 }
 
-void print_logo() {
+void print_logo(char *color_code) {
   const char *LOGO_PATH = "/.config/cli-startup/logo";
   char *path;
   path = malloc(strlen(getenv("HOME")) + strlen(LOGO_PATH) + 1);
@@ -41,7 +41,7 @@ void print_logo() {
   fcontent = malloc(size);
   fread(fcontent, 1, size, fp);
 
-  fputs(fcontent, stdout);
+  printf("%s%s", color_code, fcontent);
 
   fclose(fp);
   free(fcontent);
