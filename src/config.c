@@ -10,7 +10,6 @@ const char *KEYWORDS[KEYWORDS_LENGTH] = {
 };
 
 char* get_config_path(char* file) {
-
   strcpy(file, getenv("HOME"));
   strcat(file, CONFIG_PATH);
   
@@ -37,10 +36,26 @@ void create_config() {
   free(path);
 }
 
-void read_config(Config *config) {
+int get_bool_from_option(char *option) {
+  const int length = 3;
   char *yes[] = { "yes", "true", "on" };
   char *no[] = { "no", "false", "off" };
   
+  int opt = -1;
+  for (int i=0; i<length; i++) {
+    if (strcmp(option, yes[i]) == 0) {
+      opt = 1;
+      break;
+    } else if (strcmp(option, no[i]) == 0) {
+      opt = 0;
+      break;
+    }
+  }
+
+  return opt;
+}
+
+void read_config(Config *config) {
   char *path;
   path = malloc(strlen(getenv("HOME")) + strlen(CONFIG_PATH) + 1);
   
@@ -54,21 +69,24 @@ void read_config(Config *config) {
     read_config(config);
     return;
   }
+
+  char * line = NULL;
+  int line_number = 1;
+  size_t len = 0;
+  ssize_t read;
   
-  char line[0x40];
-  
-  while (fgets(line, 0x40, config_file)) {
-    char keyword[0x40] = {};
-    char option[0x20] = {};
+  while ((read = getline(&line, &len, config_file)) != -1) {
+    char keyword[read] = {};
+    char option[read] = {};
   
     int end_keyword = 0;
     for (int i=0; 1; i++) {
       char c = line[i];
       if (c == '\n' || c == 0) break;
       
-      if (c == '=') {
-        end_keyword = i;
-      }
+      if (c == '=') end_keyword = i;
+
+      if (!strcmp(keyword, "//")) break;
 
       if (end_keyword) {
         option[i-end_keyword-1] = c;
@@ -76,9 +94,19 @@ void read_config(Config *config) {
         keyword[i] = c;
       }
     }
+    
+    int opt = get_bool_from_option(option);
 
-    printf("%s %s\n", keyword, option);
+    if (opt == -1) {
+      fprintf(stderr, "line %d, %s is not a type of option.\n", line_number, option);
+      exit(1);
+    }
+    
+    line_number++;
   }
+  
+  if (line)
+    free(line);
 
   fclose(config_file);
   free(path);
