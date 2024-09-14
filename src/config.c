@@ -4,10 +4,15 @@
 
 #define CONFIG_PATH "/.config/cli-startup/config"
 #define KEYWORDS_LENGTH 1
+#define KEYWORDS_TOGGLE_LENGTH 1
 
 const char *KEYWORDS[KEYWORDS_LENGTH] = {
   "print_logo"
 };
+
+const char *KEYWORDS_TOGGLE[KEYWORDS_TOGGLE_LENGTH] = {
+  "print_logo"
+}
 
 char* get_config_path(char* file) {
   strcpy(file, getenv("HOME"));
@@ -55,7 +60,26 @@ int get_bool_from_option(char *option) {
   return opt;
 }
 
-void change_config(Config *config, char *keyword, int opt) {
+void change_config(Config *config, char *keyword, char *option) {
+  int opt;
+  
+  int is_toggle = 0;
+  for (int i = 0; i < KEYWORDS_TOGGLE_LENGTH; i++) {
+    if (!strcmp(keyword, KEYWORDS_TOGGLE[i]) {
+      is_toggle = 1;
+      break;
+    }
+  }
+    
+  if (is_toggle) {
+    opt = get_bool_from_option(option);
+
+    if (opt == -1) {
+      fprintf(stderr, "line %d, %s is not a type of option.\n", line_number, option);
+      exit(1);
+    }
+  }
+
   if (!strcmp(keyword, "print_logo")) {
     (*config).print_logo = opt;
   }
@@ -101,14 +125,7 @@ void read_config(Config *config) {
       }
     }
     
-    int opt = get_bool_from_option(option);
-
-    if (opt == -1) {
-      fprintf(stderr, "line %d, %s is not a type of option.\n", line_number, option);
-      exit(1);
-    }
-    
-    change_config(config, keyword, opt);
+    change_config(config, keyword, option);
     line_number++;
   }
   
