@@ -55,6 +55,12 @@ int get_bool_from_option(char *option) {
   return opt;
 }
 
+void change_config(Config *config, char *keyword, int opt) {
+  if (!strcmp(keyword, "print_logo")) {
+    *config = opt;
+  }
+}
+
 void read_config(Config *config) {
   char *path;
   path = malloc(strlen(getenv("HOME")) + strlen(CONFIG_PATH) + 1);
@@ -102,6 +108,7 @@ void read_config(Config *config) {
       exit(1);
     }
     
+    change_config(config, keyword, opt);
     line_number++;
   }
   
@@ -110,6 +117,4 @@ void read_config(Config *config) {
 
   fclose(config_file);
   free(path);
-
-  return;
 }
