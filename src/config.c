@@ -54,6 +54,31 @@ void read_config(Config *config) {
     read_config(config);
     return;
   }
+  
+  char line[0x40];
+  
+  while (fgets(line, 0x40, config_file)) {
+    char keyword[0x40] = {};
+    char option[0x20] = {};
+  
+    int end_keyword = 0;
+    for (int i=0; 1; i++) {
+      char c = line[i];
+      if (c == '\n' || c == 0) break;
+      
+      if (c == '=') {
+        end_keyword = i;
+      }
+
+      if (end_keyword) {
+        option[i-end_keyword-1] = c;
+      } else {
+        keyword[i] = c;
+      }
+    }
+
+    printf("%s %s\n", keyword, option);
+  }
 
   fclose(config_file);
   free(path);
