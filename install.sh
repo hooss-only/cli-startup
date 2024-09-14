@@ -8,6 +8,7 @@ make clean
 
 echo "[#3] Change bashrc"
 echo "$PWD/build/cli-startup" >>~/.bashrc
+echo "$PWD/build/cli-startup" >>~/.zshrc
 
 echo "[#4] Make config"
 mkdir ~/.config/cli-startup/
