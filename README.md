@@ -1,6 +1,8 @@
 # Welcome to CLI-STARTUP
 
 This project is for printing logo, weather, etc. when start up a new terminal.
+![image](https://github.com/user-attachments/assets/a28e4c4e-5477-44d0-ab56-9ec61b776c19)
+
 
 # Installation
 
