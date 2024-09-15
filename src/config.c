@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <stdint.h>
 
 #define CONFIG_PATH "/.config/cli-startup/config"
 #define KEYWORDS_LENGTH 2
@@ -23,7 +25,7 @@ char* get_config_path(char* file) {
 }
 
 typedef struct {
-  int print_logo;
+  bool print_logo;
   char *logo_color;
 } Config;
 
@@ -43,27 +45,24 @@ void create_config() {
   free(path);
 }
 
-int get_bool_from_option(char *option) {
+int8_t get_bool_from_option(char *option) {
   const int length = 3;
   char *yes[] = { "yes", "true", "on" };
   char *no[] = { "no", "false", "off" };
   
-  int opt = -1;
   for (int i=0; i<length; i++) {
     if (strcmp(option, yes[i]) == 0) {
-      opt = 1;
-      break;
+      return 1;
     } else if (strcmp(option, no[i]) == 0) {
-      opt = 0;
-      break;
+      return 0;
     }
   }
 
-  return opt;
+  return -1;
 }
 
 void change_config(Config *config, char *keyword, char *option, int line_number) {
-  int opt;
+  int8_t opt;
   
   int is_toggle = 0;
   for (int i = 0; i < KEYWORDS_TOGGLE_LENGTH; i++) {

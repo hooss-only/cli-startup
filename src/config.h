@@ -1,5 +1,7 @@
+#include <stdbool.h>
+
 typedef struct {
-  int print_logo;
+  bool print_logo;
   char *logo_color;
 } Config;
 
