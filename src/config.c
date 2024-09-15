@@ -5,16 +5,18 @@
 #include <stdint.h>
 
 #define CONFIG_PATH "/.config/cli-startup/config"
-#define KEYWORDS_LENGTH 2
-#define KEYWORDS_TOGGLE_LENGTH 1
+#define KEYWORDS_LENGTH 4
+#define KEYWORDS_TOGGLE_LENGTH 2
 
 const char *KEYWORDS[KEYWORDS_LENGTH] = {
   "print_logo",
-  "logo_color"
+  "logo_color",
+  "wise_saying"
 };
 
 const char *KEYWORDS_TOGGLE[KEYWORDS_TOGGLE_LENGTH] = {
-  "print_logo"
+  "print_logo",
+  "wise_saying"
 };
 
 char* get_config_path(char* file) {
@@ -27,6 +29,7 @@ char* get_config_path(char* file) {
 typedef struct {
   bool print_logo;
   char *logo_color;
+  bool wise_saying;
 } Config;
 
 void create_config() {
@@ -82,11 +85,11 @@ void change_config(Config *config, char *keyword, char *option, int line_number)
   }
 
   if (!strcmp(keyword, "print_logo")) {
-    (*config).print_logo = opt;
+    config->print_logo = opt;
     return;
   }
 
-if (!strcmp(keyword, "logo_color")) {
+  if (!strcmp(keyword, "logo_color")) {
     char *color_code = NULL;
     
     char *colors[] = { "black", "red", "green", "yellow", "blue", "purple", "cyan", "white" };
@@ -101,7 +104,12 @@ if (!strcmp(keyword, "logo_color")) {
       exit(1);
     }
 
-    (*config).logo_color = color_code;
+    config->logo_color = color_code;
+    return;
+  }
+
+  if (!strcmp(keyword, "wise_saying")) {
+    config->wise_saying = opt;
     return;
   }
 }
