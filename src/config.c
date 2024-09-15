@@ -3,12 +3,12 @@
 #include <string.h>
 
 #define CONFIG_PATH "/.config/cli-startup/config"
-#define KEYWORDS_LENGTH 1
+#define KEYWORDS_LENGTH 2
 #define KEYWORDS_TOGGLE_LENGTH 1
 
 const char *KEYWORDS[KEYWORDS_LENGTH] = {
   "print_logo",
-  "logo_color",
+  "logo_color"
 };
 
 const char *KEYWORDS_TOGGLE[KEYWORDS_TOGGLE_LENGTH] = {
