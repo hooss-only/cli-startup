@@ -6,11 +6,9 @@ make
 echo "[#2] Clean"
 make clean
 
-echo "[#3] Change bashrc"
-echo "$PWD/build/cli-startup" >>~/.bashrc
-echo "$PWD/build/cli-startup" >>~/.zshrc
-
-echo "[#4] Make config"
+echo "[#3] Make config"
 mkdir ~/.config/cli-startup/
 
 echo "logo_color=cyan" >>~/.config/cli-startup/config
+
+echo "Please add '~/(path to build directory)/cli-startup' to your .zshrc or .bashrc."
