@@ -8,13 +8,10 @@ dependencies:
 - GCC compiler
 - GNU make
 
-Clone this project.
 ```
-$ git clone https://github.com/hooss-only/cli-startup.git --depth=1
-```
-Move to cli-startup directory, then type the below command.
-```
-$ ./install.sh
+git clone https://github.com/hooss-only/cli-startup.git --depth=1
+cd cli-startup
+./install.sh
 ```
 
 And edit your `.zshrc` or `.bashrc`, add a new line to them.
@@ -27,6 +24,9 @@ And edit your `.zshrc` or `.bashrc`, add a new line to them.
 You can customize with configuration file, `~/.config/cli-startup/config`.
 
 ```
+// you can change logo in .config/cil-startup/logo
 print_logo=(yes/no)
 logo_color=(black/red/green/yellow/blue/purple/cyan/white)
+// you can change it in .config/cli-startup/wise_texts
+wise_saying=(yes/no)
 ```
