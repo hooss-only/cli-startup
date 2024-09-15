@@ -48,7 +48,7 @@ void print_logo(char *color_code) {
   fcontent = malloc(size);
   fread(fcontent, 1, size, fp);
 
-  printf("%s%s", color_code, fcontent);
+  printf("%s%s\033[0;37m", color_code, fcontent);
 
   fclose(fp);
   free(fcontent);
